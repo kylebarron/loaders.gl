@@ -4,6 +4,7 @@ require('./aliases');
 // Install polyfills (primarily for Node)
 require('@loaders.gl/polyfills');
 
+/*
 // Core
 require('@loaders.gl/polyfills/test');
 require('@loaders.gl/core/test');
@@ -32,6 +33,9 @@ require('@loaders.gl/kml/test');
 require('@loaders.gl/arrow/test');
 require('@loaders.gl/csv/test');
 require('@loaders.gl/experimental/test');
+*/
+
+require('@loaders.gl/experimental/test');
 
 // Archive Formats
-require('@loaders.gl/zip/test');
+// require('@loaders.gl/zip/test');

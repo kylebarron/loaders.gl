@@ -12,3 +12,5 @@ export {default as TableBatchBuilder} from './categories/table/table-batch-build
 export {default as RowTableBatch} from './categories/table/row-table-batch';
 export {default as ColumnarTableBatch} from './categories/table/columnar-table-batch';
 export {deduceTableSchema} from './categories/table/table-utils';
+
+export {default as StreamingJSONLoader} from './json-loader/streaming-json-loader';
