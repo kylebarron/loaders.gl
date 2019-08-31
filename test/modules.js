@@ -35,7 +35,7 @@ require('@loaders.gl/csv/test');
 require('@loaders.gl/experimental/test');
 */
 
-require('@loaders.gl/experimental/test');
+require('@loaders.gl/json/test');
 
 // Archive Formats
 // require('@loaders.gl/zip/test');

@@ -1,4 +1,3 @@
-// TODO - deprecated
 function parseTextSync(text, options) {
   return JSON.parse(text);
 }
