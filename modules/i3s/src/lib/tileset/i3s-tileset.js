@@ -11,7 +11,7 @@ const DEFAULT_OPTIONS = {
 
   onTileLoad: () => {}, // Indicates this a tile's content was loaded
   onTileUnload: () => {}, // Indicates this a tile's content was unloaded
-  onTileLoadFail: (tile, message, url) => {}
+  onTileError: (tile, message, url) => {}
 };
 
 function updatePriority(tile) {
@@ -40,7 +40,7 @@ export default class I3STileset {
     });
 
     this._onTileLoad = options.onTileLoad;
-    this._onTileLoadFail = options.onTileLoadFail;
+    this._onTileError = options.onTileError;
     this._onTileUnload = options.onTileUnload;
   }
 
