@@ -1,28 +1,11 @@
-// NOTE: It is possible to override the ocular-provided callbacks
-// and this take control any aspect of gatsby:
+/*
+const {setOcularConfig} = require('gatsby-theme-ocular');
+const {onCreateWebpackConfig} = require('gatsby-theme-ocular/gatsby-node');
 
-// exports.onCreateNode = ({ node, actions, getNode }) =>
-//   ocular.onCreateNode({ node, actions, getNode });
-
-// exports.setFieldsOnGraphQLNodeType = ({ type, actions }) =>
-//   ocular.setFieldsOnGraphQLNodeType({ type, actions });
-
-// // This is a main gatsby entry point
-// // Here we get to programmatically create pages after all nodes are created
-// // by gatsby.
-// // We use graphgl to query for nodes and iterate
-// exports.createPages = ({ graphql, actions }) =>
-//   ocular.createPages({ graphql, actions });
 const ocularConfig = require('./ocular-config');
-const getGatsbyNodeCallbacks = require('ocular-gatsby/gatsby-node');
+setOcularConfig(ocularConfig);
 
-const callbacks = getGatsbyNodeCallbacks(ocularConfig);
-
-module.exports = callbacks;
-
-const onCreateWebpackConfig = callbacks.onCreateWebpackConfig;
-
-callbacks.onCreateWebpackConfig = function onCreateWebpackConfigOverride(opts) {
+module.exports.onCreateWebpackConfig = function onCreateWebpackConfigOverride(opts) {
   onCreateWebpackConfig(opts);
 
   const {
@@ -77,3 +60,4 @@ callbacks.onCreateWebpackConfig = function onCreateWebpackConfigOverride(opts) {
   // Merges into the webpack config
   actions.setWebpackConfig(newConfig);
 };
+*/
