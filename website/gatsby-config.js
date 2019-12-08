@@ -19,40 +19,44 @@ for (const dependency in DEPENDENCIES) {
 const GATSBY_CONFIG = {
   plugins: [
     {
-      resolve: `gatsby-theme-ocular`, 
+      resolve: `gatsby-theme-ocular`,
       options: {
         logLevel: 1, // Adjusts amount of debug information from ocular-gatsby
-      
+
         DIR_NAME: `${__dirname}`,
         ROOT_FOLDER: `${__dirname}/../`,
         // NOTE - we currently need custom excludes in gatsby-config.js to support multiple directories
-        DOC_FOLDERS: [`${__dirname}/../docs/`, `${__dirname}/../modules/`, `${__dirname}/../arrowjs/`],
-      
+        DOC_FOLDERS: [
+          `${__dirname}/../docs/`,
+          `${__dirname}/../modules/`,
+          `${__dirname}/../arrowjs/`
+        ],
+
         DOCS,
-      
+
         // TODO/ib - from ocular, deduplicate with above settings
         PROJECT_TYPE: 'github',
-      
+
         PROJECT_NAME: 'loaders.gl',
         PROJECT_ORG: 'uber-web',
         PROJECT_URL: 'https://github.com/uber-web/loaders.gl',
         PROJECT_DESC: 'Loaders for Big Data Visualization',
         PATH_PREFIX: '/',
-      
+
         FOOTER_LOGO: '',
-      
+
         GA_TRACKING: null,
-      
+
         // For showing star counts and contributors.
         // Should be like btoa('YourUsername:YourKey') and should be readonly.
         GITHUB_KEY: null,
-      
+
         HOME_PATH: '/',
-      
+
         HOME_HEADING: 'Loaders for Big Data Visualization',
-      
+
         HOME_RIGHT: null,
-      
+
         HOME_BULLETS: [
           {
             text: 'A collection of the best open source loaders',
@@ -70,7 +74,7 @@ const GATSBY_CONFIG = {
             img: 'images/icon-high-precision.svg'
           }
         ],
-      
+
         PROJECTS: [
           {
             name: 'deck.gl',
@@ -89,13 +93,13 @@ const GATSBY_CONFIG = {
             url: 'https://nebula.gl/'
           }
         ],
-      
+
         LINK_TO_GET_STARTED: 'docs/developer-guide/get-started',
-      
+
         ADDITIONAL_LINKS: [],
-      
+
         INDEX_PAGE_URL: resolve(__dirname, './templates/index.jsx'),
-      
+
         EXAMPLES: [
           // {
           //   title: 'Point Clouds & Meshes',
@@ -116,7 +120,7 @@ const GATSBY_CONFIG = {
             path: 'examples/gltf'
           }
         ],
-      
+
         // Ocular adds this to gatsby's webpack config
         webpack: {
           resolve: {
@@ -130,7 +134,7 @@ const GATSBY_CONFIG = {
       }
     },
     {resolve: 'gatsby-plugin-no-sourcemaps'}
-  ],
+  ]
 };
 
 module.exports = GATSBY_CONFIG;
