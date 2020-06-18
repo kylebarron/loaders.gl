@@ -10,13 +10,13 @@ function parseRecord(view) {
     case 0:
       return parseNull(view, offset);
     case 1:
-      return parsePoint(view, offset, 2);
+      return parsePoint(view, offset);
     case 3:
-      return parsePolyLine(view, offset, 2);
+      return parsePoly(view, offset);
     case 5:
-      return parsePolygon(view, offset, 2);
+      return parsePoly(view, offset);
     case 8:
-      return parseMultiPoint(view, offset, 2);
+      return parseMultiPoint(view, offset);
     // case 11: return parsePoint(view, offset); // PointZ
     // case 13: return parsePolyLine(view, offset); // PolyLineZ
     // case 15: return parsePolygon(view, offset); // PolygonZ
@@ -31,8 +31,9 @@ function parseRecord(view) {
 }
 
 // MultiPolygon doesn't exist? Multiple records with the same attributes?
-// 2D polygon parsing only
-function parsePolygon(view, offset, dim) {
+// polygon and polyline parsing
+// This is 2d only
+function parsePoly(view, offset) {
   // Do I need to parse box, or just skip over it?
   var minX = view.getFloat64(offset, LITTLE_ENDIAN);
   offset += 8;
@@ -50,11 +51,11 @@ function parsePolygon(view, offset, dim) {
 
   // Load parts directly into int32 array
   // Note, doesn't include length of positions; hence is one shorter than deck expects
-  var primitivePolygonIndices = new Int32Array(view.buffer, view.byteOffset + offset, nParts);
+  var indices = new Int32Array(view.buffer, view.byteOffset + offset, nParts);
   offset += nParts * 4;
 
-  // Loading array from a contiguous block of data is presumably much faster
-  // than a for loop, but only a 50-50 chance of 8-byte alignment
+  // Loading array from a contiguous block of data is ~20x faster than a for
+  // loop, but only a 50-50 chance of 8-byte alignment
   var positions;
   var bufferOffset = view.byteOffset + offset;
   if (bufferOffset % 8) {
@@ -72,6 +73,6 @@ function parsePolygon(view, offset, dim) {
 
   return {
     positions,
-    primitivePolygonIndices
+    indices
   };
 }
