@@ -55,15 +55,8 @@ function parseMultiPoint(view, offset) {
 // polygon and polyline parsing
 // This is 2d only
 function parsePoly(view, offset) {
-  // Do I need to parse box, or just skip over it?
-  var minX = view.getFloat64(offset, LITTLE_ENDIAN);
-  offset += Float64Array.BYTES_PER_ELEMENT;
-  var minY = view.getFloat64(offset, LITTLE_ENDIAN);
-  offset += Float64Array.BYTES_PER_ELEMENT;
-  var maxX = view.getFloat64(offset, LITTLE_ENDIAN);
-  offset += Float64Array.BYTES_PER_ELEMENT;
-  var maxY = view.getFloat64(offset, LITTLE_ENDIAN);
-  offset += Float64Array.BYTES_PER_ELEMENT;
+  // skip parsing bounding box
+  offset += 4 * Float64Array.BYTES_PER_ELEMENT;
 
   var nParts = view.getInt32(offset, LITTLE_ENDIAN);
   offset += Int32Array.BYTES_PER_ELEMENT;
@@ -84,5 +77,5 @@ function parsePoly(view, offset) {
 function parse2dPositions(view, offset, nPoints) {
   var bufferOffset = view.byteOffset + offset;
   var bufferLength = nPoints * 2 * Float64Array.BYTES_PER_ELEMENT;
-  return new Float64Array(view.buffer.slice(bufferOffset, bufferOffset + bufferLength))
+  return new Float64Array(view.buffer.slice(bufferOffset, bufferOffset + bufferLength));
 }
