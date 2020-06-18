@@ -1,10 +1,10 @@
-/* eslint-disable */
-import {BIG_ENDIAN, LITTLE_ENDIAN} from './util';
+import {LITTLE_ENDIAN} from './util';
 
 export function parseRecord(view) {
-  var offset = 0;
-  var type = view.getInt32(offset, LITTLE_ENDIAN);
+  let offset = 0;
+  const type = view.getInt32(offset, LITTLE_ENDIAN);
   offset += Int32Array.BYTES_PER_ELEMENT;
+
   switch (type) {
     case 0:
       return parseNull(view, offset);
@@ -36,8 +36,8 @@ function parseNull(view, offset) {
 }
 
 function parsePoint(view, offset, dim) {
-  var bufferOffset = view.byteOffset + offset;
-  var bufferLength = dim * Float64Array.BYTES_PER_ELEMENT;
+  const bufferOffset = view.byteOffset + offset;
+  const bufferLength = dim * Float64Array.BYTES_PER_ELEMENT;
   return new Float64Array(view.buffer.slice(bufferOffset, bufferOffset + bufferLength));
 }
 
@@ -45,7 +45,7 @@ function parseMultiPoint(view, offset) {
   // skip parsing box
   offset += 4 * Float64Array.BYTES_PER_ELEMENT;
 
-  var nPoints = view.getInt32(offset, LITTLE_ENDIAN);
+  const nPoints = view.getInt32(offset, LITTLE_ENDIAN);
   offset += Int32Array.BYTES_PER_ELEMENT;
 
   return parse2dPositions(view, offset, nPoints);
@@ -58,16 +58,16 @@ function parsePoly(view, offset) {
   // skip parsing bounding box
   offset += 4 * Float64Array.BYTES_PER_ELEMENT;
 
-  var nParts = view.getInt32(offset, LITTLE_ENDIAN);
+  const nParts = view.getInt32(offset, LITTLE_ENDIAN);
   offset += Int32Array.BYTES_PER_ELEMENT;
-  var nPoints = view.getInt32(offset, LITTLE_ENDIAN);
+  const nPoints = view.getInt32(offset, LITTLE_ENDIAN);
   offset += Int32Array.BYTES_PER_ELEMENT;
 
   // Load parts directly into int32 array
   // Note, doesn't include length of positions; hence is one shorter than deck expects
-  var bufferOffset = view.byteOffset + offset;
-  var bufferLength = nParts * Int32Array.BYTES_PER_ELEMENT;
-  var indices = new Int32Array(view.buffer.slice(bufferOffset, bufferOffset + bufferLength));
+  const bufferOffset = view.byteOffset + offset;
+  const bufferLength = nParts * Int32Array.BYTES_PER_ELEMENT;
+  const indices = new Int32Array(view.buffer.slice(bufferOffset, bufferOffset + bufferLength));
   offset += nParts * Int32Array.BYTES_PER_ELEMENT;
 
   return {
@@ -77,7 +77,7 @@ function parsePoly(view, offset) {
 }
 
 function parse2dPositions(view, offset, nPoints) {
-  var bufferOffset = view.byteOffset + offset;
-  var bufferLength = nPoints * 2 * Float64Array.BYTES_PER_ELEMENT;
+  const bufferOffset = view.byteOffset + offset;
+  const bufferLength = nPoints * 2 * Float64Array.BYTES_PER_ELEMENT;
   return new Float64Array(view.buffer.slice(bufferOffset, bufferOffset + bufferLength));
 }
