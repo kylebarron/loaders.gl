@@ -86,20 +86,7 @@ function parsePoly(view, offset) {
 function parse2dPositions(view, offset, nPoints) {
   // Loading array from a contiguous block of data is ~20x faster than a for
   // loop, but only a 50-50 chance of 8-byte alignment
-  var positions;
   var bufferOffset = view.byteOffset + offset;
-  if (bufferOffset % 8) {
-    positions = new Float64Array(nPoints * 2);
-    for (var i = 0; i < nPoints; i++) {
-      positions[i * 2] = view.getFloat64(offset, LITTLE_ENDIAN);
-      offset += 8;
-      positions[i * 2 + 1] = view.getFloat64(offset, LITTLE_ENDIAN);
-      offset += 8;
-    }
-  } else {
-    // Note, host must be little endian
-    positions = new Float64Array(view.buffer, view.byteOffset + offset, nPoints * 2);
-  }
-
-  return positions;
+  var bufferLength = nPoints * 2 * 8;
+  return new Float64Array(view.buffer.slice(bufferOffset, bufferOffset + bufferLength))
 }
