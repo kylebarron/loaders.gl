@@ -1,7 +1,6 @@
 /* eslint-disable */
 import {BIG_ENDIAN, LITTLE_ENDIAN} from './util';
 
-// view = recordView;
 function parseRecord(view) {
   var offset = 0;
   var type = view.getInt32(offset, LITTLE_ENDIAN);
@@ -30,6 +29,30 @@ function parseRecord(view) {
   }
 }
 
+function parseNull(view, offset) {
+  return null;
+}
+
+function parsePoint(view, offset) {
+  var positions = new Float64Array(2);
+  positions[0] = view.getFloat64(offset, LITTLE_ENDIAN);
+  offset += 8;
+  positions[1] = view.getFloat64(offset, LITTLE_ENDIAN);
+  offset += 8;
+
+  return positions;
+}
+
+function parseMultiPoint(view, offset) {
+  // skip parsing box
+  offset += 4 * 8;
+
+  var nPoints = view.getInt32(offset, LITTLE_ENDIAN);
+  offset += 4;
+
+  return parse2dPositions(view, offset, nPoints);
+}
+
 // MultiPolygon doesn't exist? Multiple records with the same attributes?
 // polygon and polyline parsing
 // This is 2d only
@@ -54,6 +77,13 @@ function parsePoly(view, offset) {
   var indices = new Int32Array(view.buffer, view.byteOffset + offset, nParts);
   offset += nParts * 4;
 
+  return {
+    positions: parse2dPositions(view, offset, nPoints),
+    indices
+  };
+}
+
+function parse2dPositions(view, offset, nPoints) {
   // Loading array from a contiguous block of data is ~20x faster than a for
   // loop, but only a 50-50 chance of 8-byte alignment
   var positions;
@@ -71,8 +101,5 @@ function parsePoly(view, offset) {
     positions = new Float64Array(view.buffer, view.byteOffset + offset, nPoints * 2);
   }
 
-  return {
-    positions,
-    indices
-  };
+  return positions;
 }
