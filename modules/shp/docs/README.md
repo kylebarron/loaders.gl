@@ -1,11 +1,11 @@
 # Overview
 
-The `@loaders.gl/shp` module handles the Shapefile format, a widely used binary format.
+The `@loaders.gl/shapefile` module handles the Shapefile format, a widely used binary format.
 
 ## Installation
 
 ```bash
-npm install @loaders.gl/shp
+npm install @loaders.gl/shapefile
 ```
 
 ## Loaders and Writers
