@@ -65,7 +65,9 @@ function parsePoly(view, offset) {
 
   // Load parts directly into int32 array
   // Note, doesn't include length of positions; hence is one shorter than deck expects
-  var indices = new Int32Array(view.buffer, view.byteOffset + offset, nParts);
+  var bufferOffset = view.byteOffset + offset;
+  var bufferLength = nParts * Int32Array.BYTES_PER_ELEMENT;
+  var indices = new Int32Array(view.buffer.slice(bufferOffset, bufferOffset + bufferLength));
   offset += nParts * Int32Array.BYTES_PER_ELEMENT;
 
   return {
