@@ -1,33 +1,35 @@
-import {parseHeader, BIG_ENDIAN, LITTLE_ENDIAN} from './util';
+import {parseHeader, BIG_ENDIAN} from './util';
+import {parseRecord} from './parse-geometry';
 
 
-var SHAPE_HEADER_SIZE = 100;
+const SHAPE_HEADER_SIZE = 100;
 // In line with the spec; the record header is just index, byte length
 // geometry type is part of the record
-var SHAPE_RECORD_HEADER_SIZE = 8;
-
+const SHAPE_RECORD_HEADER_SIZE = 8;
 
 export function parseShape(arrayBuffer) {
-  var headerView = new DataView(arrayBuffer, 0, SHAPE_HEADER_SIZE);
-  var header = parseHeader(headerView);
+  const headerView = new DataView(arrayBuffer, 0, SHAPE_HEADER_SIZE);
+  const header = parseHeader(headerView);
 
-  var currentIndex = 0;
-  var features = [];
+  // eslint-disable-next-line
+  let currentIndex = 0;
+  const features = [];
 
-  var offset = SHAPE_HEADER_SIZE;
+  let offset = SHAPE_HEADER_SIZE;
 
   while (offset + SHAPE_RECORD_HEADER_SIZE < arrayBuffer.byteLength) {
-    var recordHeaderView = new DataView(arrayBuffer, offset, SHAPE_RECORD_HEADER_SIZE);
+    const recordHeaderView = new DataView(arrayBuffer, offset, SHAPE_RECORD_HEADER_SIZE);
     // Numbering starts at 1
-    var recordNumber = recordHeaderView.getInt32(0, BIG_ENDIAN);
+    // eslint-disable-next-line
+    const recordNumber = recordHeaderView.getInt32(0, BIG_ENDIAN);
     // 2 byte words; includes the four words of record header
-    var byteLength = recordHeaderView.getInt32(4, BIG_ENDIAN) * 2;
+    const byteLength = recordHeaderView.getInt32(4, BIG_ENDIAN) * 2;
+    offset += Int32Array.BYTES_PER_ELEMENT * 2;
     // var type = recordHeaderView.getInt32(8, true);
 
-    offset += 8;
-    var recordView = new DataView(arrayBuffer, offset, byteLength);
+    const recordView = new DataView(arrayBuffer, offset, byteLength);
     features.push(parseRecord(recordView));
-    currentIndex++
+    currentIndex++;
     offset += byteLength;
 
     // // All records must have at least four bytes (for the record shape type)
@@ -42,11 +44,8 @@ export function parseShape(arrayBuffer) {
     // }
   }
 
-  features
-  // TODO convert to geojson?
   return {
     header,
     features
   };
 }
-
