@@ -7,7 +7,7 @@ const SHAPE_HEADER_SIZE = 100;
 // geometry type is part of the record
 const SHAPE_RECORD_HEADER_SIZE = 8;
 
-export function parseShape(arrayBuffer) {
+export default function parseShape(arrayBuffer) {
   const headerView = new DataView(arrayBuffer, 0, SHAPE_HEADER_SIZE);
   const header = parseHeader(headerView);
 
