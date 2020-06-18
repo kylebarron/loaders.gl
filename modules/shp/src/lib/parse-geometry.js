@@ -4,7 +4,7 @@ import {BIG_ENDIAN, LITTLE_ENDIAN} from './util';
 function parseRecord(view) {
   var offset = 0;
   var type = view.getInt32(offset, LITTLE_ENDIAN);
-  offset += 4;
+  offset += Int32Array.BYTES_PER_ELEMENT;
   switch (type) {
     case 0:
       return parseNull(view, offset);
@@ -36,19 +36,19 @@ function parseNull(view, offset) {
 function parsePoint(view, offset) {
   var positions = new Float64Array(2);
   positions[0] = view.getFloat64(offset, LITTLE_ENDIAN);
-  offset += 8;
+  offset += Float64Array.BYTES_PER_ELEMENT;
   positions[1] = view.getFloat64(offset, LITTLE_ENDIAN);
-  offset += 8;
+  offset += Float64Array.BYTES_PER_ELEMENT;
 
   return positions;
 }
 
 function parseMultiPoint(view, offset) {
   // skip parsing box
-  offset += 4 * 8;
+  offset += 4 * Float64Array.BYTES_PER_ELEMENT;
 
   var nPoints = view.getInt32(offset, LITTLE_ENDIAN);
-  offset += 4;
+  offset += Int32Array.BYTES_PER_ELEMENT;
 
   return parse2dPositions(view, offset, nPoints);
 }
@@ -59,23 +59,23 @@ function parseMultiPoint(view, offset) {
 function parsePoly(view, offset) {
   // Do I need to parse box, or just skip over it?
   var minX = view.getFloat64(offset, LITTLE_ENDIAN);
-  offset += 8;
+  offset += Float64Array.BYTES_PER_ELEMENT;
   var minY = view.getFloat64(offset, LITTLE_ENDIAN);
-  offset += 8;
+  offset += Float64Array.BYTES_PER_ELEMENT;
   var maxX = view.getFloat64(offset, LITTLE_ENDIAN);
-  offset += 8;
+  offset += Float64Array.BYTES_PER_ELEMENT;
   var maxY = view.getFloat64(offset, LITTLE_ENDIAN);
-  offset += 8;
+  offset += Float64Array.BYTES_PER_ELEMENT;
 
   var nParts = view.getInt32(offset, LITTLE_ENDIAN);
-  offset += 4;
+  offset += Int32Array.BYTES_PER_ELEMENT;
   var nPoints = view.getInt32(offset, LITTLE_ENDIAN);
-  offset += 4;
+  offset += Int32Array.BYTES_PER_ELEMENT;
 
   // Load parts directly into int32 array
   // Note, doesn't include length of positions; hence is one shorter than deck expects
   var indices = new Int32Array(view.buffer, view.byteOffset + offset, nParts);
-  offset += nParts * 4;
+  offset += nParts * Int32Array.BYTES_PER_ELEMENT;
 
   return {
     positions: parse2dPositions(view, offset, nPoints),
@@ -84,9 +84,7 @@ function parsePoly(view, offset) {
 }
 
 function parse2dPositions(view, offset, nPoints) {
-  // Loading array from a contiguous block of data is ~20x faster than a for
-  // loop, but only a 50-50 chance of 8-byte alignment
   var bufferOffset = view.byteOffset + offset;
-  var bufferLength = nPoints * 2 * 8;
+  var bufferLength = nPoints * 2 * Float64Array.BYTES_PER_ELEMENT;
   return new Float64Array(view.buffer.slice(bufferOffset, bufferOffset + bufferLength))
 }
