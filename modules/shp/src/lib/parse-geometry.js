@@ -1,7 +1,7 @@
 /* eslint-disable */
 import {BIG_ENDIAN, LITTLE_ENDIAN} from './util';
 
-function parseRecord(view) {
+export function parseRecord(view) {
   var offset = 0;
   var type = view.getInt32(offset, LITTLE_ENDIAN);
   offset += Int32Array.BYTES_PER_ELEMENT;
@@ -9,18 +9,20 @@ function parseRecord(view) {
     case 0:
       return parseNull(view, offset);
     case 1:
-      return parsePoint(view, offset);
+      return parsePoint(view, offset, 2);
     case 3:
       return parsePoly(view, offset);
     case 5:
       return parsePoly(view, offset);
     case 8:
       return parseMultiPoint(view, offset);
-    // case 11: return parsePoint(view, offset); // PointZ
+    case 11:
+      return parsePoint(view, offset, 4); // PointZ
     // case 13: return parsePolyLine(view, offset); // PolyLineZ
     // case 15: return parsePolygon(view, offset); // PolygonZ
     // case 18: return parseMultiPoint(view, offset); // MultiPointZ
-    // case 21: return parsePoint(view, offset); // PointM
+    case 21:
+      return parsePoint(view, offset, 3); // PointM
     // case 23: return parsePolyLine(view, offset); // PolyLineM
     // case 25: return parsePolygon(view, offset); // PolygonM
     // case 28: return parseMultiPoint(view, offset);// MultiPointM
@@ -33,14 +35,10 @@ function parseNull(view, offset) {
   return null;
 }
 
-function parsePoint(view, offset) {
-  var positions = new Float64Array(2);
-  positions[0] = view.getFloat64(offset, LITTLE_ENDIAN);
-  offset += Float64Array.BYTES_PER_ELEMENT;
-  positions[1] = view.getFloat64(offset, LITTLE_ENDIAN);
-  offset += Float64Array.BYTES_PER_ELEMENT;
-
-  return positions;
+function parsePoint(view, offset, dim) {
+  var bufferOffset = view.byteOffset + offset;
+  var bufferLength = dim * Float64Array.BYTES_PER_ELEMENT;
+  return new Float64Array(view.buffer.slice(bufferOffset, bufferOffset + bufferLength));
 }
 
 function parseMultiPoint(view, offset) {
