@@ -16,8 +16,6 @@ const BOSTOCK_POLYGON_TEST_FILES = ['polygons'];
 
 test('Bostock Point tests', async t => {
   for (const testFileName of BOSTOCK_POINT_TEST_FILES) {
-    // eslint-disable-next-line
-    console.log(testFileName);
     let response = await fetchFile(`${BOSTOCK_DATA_FOLDER}/${testFileName}.shp`);
     const body = await response.arrayBuffer();
 
@@ -36,8 +34,6 @@ test('Bostock Point tests', async t => {
 
 test('Bostock Polyline tests', async t => {
   for (const testFileName of BOSTOCK_POLYLINE_TEST_FILES) {
-    // eslint-disable-next-line
-    console.log(testFileName);
     let response = await fetchFile(`${BOSTOCK_DATA_FOLDER}/${testFileName}.shp`);
     const body = await response.arrayBuffer();
 
@@ -56,8 +52,6 @@ test('Bostock Polyline tests', async t => {
 
 test('Bostock Polygon tests', async t => {
   for (const testFileName of BOSTOCK_POLYGON_TEST_FILES) {
-    // eslint-disable-next-line
-    console.log(testFileName);
     let response = await fetchFile(`${BOSTOCK_DATA_FOLDER}/${testFileName}.shp`);
     const body = await response.arrayBuffer();
 
