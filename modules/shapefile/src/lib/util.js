@@ -14,7 +14,7 @@ export function parseHeader(header) {
       maxX: header.getFloat64(52, LITTLE_ENDIAN),
       maxY: header.getFloat64(60, LITTLE_ENDIAN),
       maxZ: header.getFloat64(76, LITTLE_ENDIAN),
-      maxM: header.getFloat64(92, LITTLE_ENDIAN),
+      maxM: header.getFloat64(92, LITTLE_ENDIAN)
     }
   };
 }
