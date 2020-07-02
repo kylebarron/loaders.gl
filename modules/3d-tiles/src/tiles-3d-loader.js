@@ -40,10 +40,10 @@ async function parse(data, options, context, loader) {
   // auto detect file type
   const loaderOptions = options['3d-tiles'] || {};
   let isTileset;
-  if ('isTileset' in loaderOptions) {
-    isTileset = loaderOptions.isTileset;
-  } else {
+  if (loaderOptions.isTileset === 'auto') {
     isTileset = context.url && context.url.indexOf('.json') !== -1;
+  } else {
+    isTileset = loaderOptions.isTileset;
   }
 
   if (isTileset) {
@@ -67,7 +67,10 @@ const Tiles3DLoader = {
   options: {
     '3d-tiles': {
       loadGLTF: true,
-      decodeQuantizedPositions: false
+      decodeQuantizedPositions: false,
+      isTileset: 'auto',
+      tile: null,
+      tileset: null
     }
   }
 };
