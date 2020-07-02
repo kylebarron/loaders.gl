@@ -6,7 +6,7 @@ const SHAPEFILE_JS_DATA_FOLDER = '@loaders.gl/shapefile/test/data/shapefile-js';
 const SHAPEFILE_JS_TEST_FILES = [
   'boolean-property',
   'date-property',
-  // 'latin1-property', // fails on 'México'
+  'latin1-property', // fails on 'México'
   'mixed-properties',
   'multipoints',
   'null',
